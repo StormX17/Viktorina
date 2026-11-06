@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Quiz App</title>
+  <title>Telegram Mega Quiz 50</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
@@ -97,11 +97,11 @@
 </head>
 <body>
   <div class="app-container">
-    <h2>🎯 Viktorina</h2>
+    <h2>🎯 Mega Viktorina (50 ta savol)</h2>
 
     <div id="quizScreen">
       <div class="quiz-info">
-        <span id="questionCounter">Savol: 1/5</span>
+        <span id="questionCounter">Savol: 1/50</span>
         <span id="scoreTracker">Ball: 0</span>
       </div>
       <div class="question-box" id="questionText">Savol yuklanmoqda...</div>
@@ -121,37 +121,74 @@
       window.Telegram.WebApp.expand();
     }
 
-    const quizData = [
-      {
-        question: "Internet tarmog'ining asoschisi yoki 'The World Wide Web' yaratuvchisi kim?",
-        options: ["Stiv Jobs", "Tim Berners-Li", "Bill Geyts", "Mark Sukerberg"],
-        correct: 1
-      },
-      {
-        question: "JavaScript dasturlash tili qaysi yilda yaratilgan?",
-        options: ["1991", "1995", "2000", "1985"],
-        correct: 1
-      },
-      {
-        question: "Yer yuzidagi eng katta okean qaysi?",
-        options: ["Atlantika okeani", "Hind okeani", "Tinch okeani", "Shimoliy Muz okeani"],
-        correct: 2
-      },
-      {
-        question: "Inson tanasidagi eng kuchli muskul qaysi biri?",
-        options: ["Yurak muskuli", "Jag' muskuli", "Son muskuli", "Elka muskuli"],
-        correct: 1
-      },
-      {
-        question: "O'zbekiston Respublikasi qachon o'z Mustaqilligini e'lon qilgan?",
-        options: ["1991-yil 31-avgust", "1991-yil 1-sentyabr", "1991-yil 25-dekabr", "1989-yil 1-sentyabr"],
-        correct: 1
-      }
+    const allQuestions = [
+      { question: "Internet tarmog'ining asoschisi (WWW yaratuvchisi) kim?", options: ["Stiv Jobs", "Tim Berners-Li", "Bill Geyts", "Mark Sukerberg"], correct: 1 },
+      { question: "JavaScript dasturlash tili qaysi yilda yaratilgan?", options: ["1991", "1995", "2000", "1985"], correct: 1 },
+      { question: "Yer yuzidagi eng katta okean qaysi?", options: ["Atlantika okeani", "Hind okeani", "Tinch okeani", "Shimoliy Muz okeani"], correct: 2 },
+      { question: "Inson tanasidagi eng kuchli muskul qaysi biri?", options: ["Yurak muskuli", "Jag' muskuli", "Son muskuli", "Elka muskuli"], correct: 1 },
+      { question: "O'zbekiston Respublikasi mustaqilligini qachon e'lon qilgan?", options: ["1991-yil 31-avgust", "1991-yil 1-sentyabr", "1991-yil 25-dekabr", "1989-yil 1-sentyabr"], correct: 1 },
+      { question: "Kompyuterning miyasi deb nimaga aytiladi?", options: ["Operativ xotira (RAM)", "Protsessor (CPU)", "Qattiq disk (HDD)", "Videokarta"], correct: 1 },
+      { question: "Eng yengil kimyoviy element qaysi?", options: ["Geliy", "Vodorod", Kislorod", "Azot"], correct: 1 },
+      { question: "Quyosh sistemasidagi eng katta sayyora?", options: ["Saturn", "Yer", "Yupiter", "Neptun"], correct: 2 },
+      { question: "Scratch dasturida bloklar qaysi tamoyil asosida ishlaydi?", options: ["Matn yozish", "Bloklarni sudrab olib kelish (Drag-and-Drop)", "Kompilyatsiya", "Kod yozish"], correct: 1 },
+      { question: "Prizmaning hajmini topish uchun nima qilinadi?", options: ["Asos yuziga balandlik ko'paytiriladi", "Perimetri qo'shiladi", "Tomonlari bo'linadi", "Faqat yuzi topiladi"], correct: 0 },
+      { question: "Buxoro shahridagi tarixiy minoraning nomi nima?", options: ["Kalta minor", "Minorai Kalon", "Sherdor", "Chorsu"], correct: 1 },
+      { question: "Suvning kimyoviy formulasi qanday?", options: ["H2O", "CO2", "O2", "NaCl"], correct: 0 },
+      { question: "Dunyodagi eng uzun daryo qaysi?", options: ["Amazonka", "Nil", "Misisipi", "Sirdaryo"], correct: 1 },
+      { question: "1 Bayt necha Bitga teng?", options: ["4", "8", "16", "32"], correct: 1 },
+      { question: "Amir Temur qachon tavallud topgan?", options: ["1336-yil", "1365-yil", "1370-yil", "1405-yil"], correct: 0 },
+      { question: "Inson tanasida nechta suyak bor (kattalarda)?", options: ["206", "210", "198", "220"], correct: 0 },
+      { question: "Kompyuter xotirasining eng kichik o'lchov birligi nima?", options: ["Bayt", "Bit", "Kilobayt", "Megabayt"], correct: 1 },
+      { question: "Frantsiya poytaxti qaysi shahar?", options: ["Berlin", "Madrid", "Parij", "Rim"], correct: 2 },
+      { question: "Alisher Navoiyning mashhur besh dostoni qanday ataladi?", options: ["Xamsa", "Devon", "Boburnoma", "Zafarnoma"], correct: 0 },
+      { question: "CSS nima vazifani bajaradi?", options: ["Sayt tuzilmasini yaratadi", "Sayt dizayni va uslubini beradi", "Saytga mantiq qo'shadi", "Ma'lumotlar bazasi"], correct: 1 },
+      { question: "Matematikada Pi (π) soni taxminan nimaga teng?", options: ["3.14", "2.71", "1.41", "3.33"], correct: 0 },
+      { question: "Qaysi qit'ada eng ko'p davlat joylashgan?", options: ["Osiyo", "Afrika", "Evropa", "Janubiy Amerika"], correct: 1 },
+      { question: "HTML so'zining ma'nosi nima?", options: ["HyperText Markup Language", "High Transfer Machine Language", "Hyperlink Text Model", "Home Tool Markup Language"], correct: 0 },
+      { question: "Eng qattiq tabiiy material nima?", options: ["Temir", "Olmos", "Titan", "Granit"], correct: 1 },
+      { question: "Tinch okeanining eng chuqur joyi qanday ataladi?", options: ["Mariana botig'i", "Java botig'i", "Puerto-Riko", "Katsivelli"], correct: 0 },
+      { question: "Python dasturlash tilining ramziy belgisi (logotipi) nima?", options: ["Ilon", "Qush", "Arslon", "Delfin"], correct: 0 },
+      { question: "1 kilogramm necha grammga teng?", options: ["100 g", "500 g", "1000 g", "10000 g"], correct: 2 },
+      { question: "Buyuk ipak yo'li qaysi qit'alarni bog'lagan?", options: ["Osiyo va Evropa", "Afrika va Amerika", "Avstraliya va Antarktida", "Faqat Osiyo"], correct: 0 },
+      { question: "Gigabayt (GB) Megabaytdan (MB) necha marta katta?", options: ["100", "512", "1024", "2048"], correct: 2 },
+      { question: "Yorug'lik tezligi sekundiga taxminan necha kilometr?", options: ["300 000 km/s", "150 000 km/s", "3 000 km/s", "30 000 km/s"], correct: 0 },
+      { question: "Abulgʻozi Bahodirxon yozgan tarixiy asar qanday nomlanadi?", options: ["Shajarai turk", "Boburnoma", "Qutadg'u bilig", "Devonu lug'atit turk"], correct: 0 },
+      { question: "Kompyuter tarmoqlarida 'IP' so'zi nimani anglatadi?", options: ["Internet Protocol", "Internal Program", "Image Process", "Input Port"], correct: 0 },
+      { question: "Inson organizmida kislorodni qaysi hujayralar tashiydi?", options: ["Oq qon tanachalari", "Qizil qon tanachalari (Eritrotsitlar)", "Trombotsitlar", "Nerv hujayralari"], correct: 1 },
+      { question: "Italiya poytaxti qaysi shahar?", options: ["Milan", "Venetsiya", "Rim", "Florensiya"], correct: 2 },
+      { question: "Qaysi planetada hayot mavjud deb topilgan?", options: ["Mars", "Venera", "Yer", "Mars"], correct: 2 },
+      { question: "Algoritm so'zi qaysi buyuk alloma nomi bilan bog'liq?", options: ["Al-Xorazmiy", "Abu Ali ibn Sino", "Beruniy", "Mirzo Ulug'bek"], correct: 0 },
+      { question: "Futbol o'yinida maydonda har bir jamoadan nechta o'yinchi harakat qiladi?", options: ["9 ta", "10 ta", "11 ta", "12 ta"], correct: 2 },
+      { question: "Gidrosfera nima?", options: ["Yerning suv qobig'i", "Havo qobig'i", "Tosh qobig'i", "Tirik organizmlar dunyosi"], correct: 0 },
+      { question: "Qaysi daryo O'zbekistondan oqib o'tmaydi?", options: ["Amudaryo", "Sirdaryo", "Amazonka", "Zarafshon"], correct: 2 },
+      { question: "Monitor qanday qurilma hisoblanadi?", options: ["Kiritish qurilmasi", "Chiqarish qurilmasi", "Saqlash qurilmasi", "Boshqarish qurilmasi"], correct: 1 },
+      { question: "Uchburchakning burchaklari yig'indisi necha gradus?", options: ["90°", "180°", "360°", "270°"], correct: 1 },
+      { question: "Mustaqil O'zbekistonning ilk Prezidenti kim bo'lgan?", options: ["Islom Karimov", "Shavkat Mirziyoyev", "Mirzo Ulug'bek", "Amir Temur"], correct: 0 },
+      { question: "Atmosfera nima?", options: ["Yerning havo qobig'i", "Yerning suv qobig'i", "Yerning qattiq qobig'i", "Yer yadrosi"], correct: 0 },
+      { question: "Klaviaturadagi 'Enter' tugmasi qanday vazifani bajaradi?", options: ["O'chirish", "Tasdiqlash yoki yangi qatorga o'tish", "Nusxalash", "Izlash"], correct: 1 },
+      { question: "Quyosh nuri Yerdagi qancha vaqtda yetib keladi?", options: ["1 soniyada", "8 daqiqada", "1 soatda", "24 soatda"], correct: 1 },
+      { question: "Bobur Mirzo qaysi mashhur asarni yozgan?", options: ["Boburnoma", "Xamsa", "Muhokamat ul-lug'atayn", "Qobusnoma"], correct: 0 },
+      { question: "Kompyuterga virus tushishining oldini olish uchun nima o'rnatiladi?", options: ["Antivirus dasturi", "O'yin", "Brauzer", "Pleyer"], correct: 0 },
+      { question: "Inson skeletida nechta bo'yin umurtqasi bor?", options: ["5 ta", "7 ta", "12 ta", "9 ta"], correct: 1 },
+      { question: "Eng kichik tub son qaysi?", options: ["0", "1", "2", "3"], correct: 2 },
+      { question: "Telegram messenjeri asoschisi kim?", options: ["Pavel Durov", "Mark Sukerberg", "Ilon Mask", "Stiv Jobs"], correct: 0 }
     ];
 
+    let quizData = [];
     let currentQuestion = 0;
     let score = 0;
     let answered = false;
+
+    // Savollarni aralashtirib, o'yinga tayyorlash
+    function initQuiz() {
+      // Tasodifiy tartibda aralashtirish
+      quizData = [...allQuestions].sort(() => Math.random() - 0.5);
+      currentQuestion = 0;
+      score = 0;
+      document.getElementById('resultScreen').style.display = 'none';
+      document.getElementById('quizScreen').style.display = 'block';
+      loadQuestion();
+    }
 
     const questionCounter = document.getElementById('questionCounter');
     const scoreTracker = document.getElementById('scoreTracker');
@@ -208,19 +245,14 @@
       quizScreen.style.display = 'none';
       resultScreen.style.display = 'block';
       const maxScore = quizData.length * 10;
-      resultText.html = `Siz ${quizData.length} ta savoldan ${score / 10} tasiga to'g'ri javob berdingiz.<br>Umumiy to'plagan balingiz: <b>${score} / ${maxScore}</b>`;
       resultText.innerHTML = `Siz ${quizData.length} ta savoldan ${score / 10} tasiga to'g'ri javob berdingiz.<br>Umumiy to'plagan balingiz: <b>${score} / ${maxScore}</b>`;
     }
 
     function restartQuiz() {
-      currentQuestion = 0;
-      score = 0;
-      resultScreen.style.display = 'none';
-      quizScreen.style.display = 'block';
-      loadQuestion();
+      initQuiz();
     }
 
-    loadQuestion();
+    initQuiz();
   </script>
 </body>
 </html>
