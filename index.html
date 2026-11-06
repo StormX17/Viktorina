@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Mega Quiz 50</title>
+  <title>Multilingual Mega Quiz</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
@@ -28,6 +28,27 @@
       margin-top: 0;
       text-align: center;
       font-size: 20px;
+    }
+    .lang-bar {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    .lang-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: var(--tg-theme-bg-color, #fff);
+      color: var(--tg-theme-text-color, #000);
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .lang-btn.active {
+      background-color: #0088cc;
+      color: white;
+      border-color: #0088cc;
     }
     .quiz-info {
       display: flex;
@@ -97,11 +118,18 @@
 </head>
 <body>
   <div class="app-container">
-    <h2>🎯 Mega Viktorina (50 ta savol)</h2>
+    <h2>🎯 Mega Quiz</h2>
+
+    <!-- Til tanlash paneli -->
+    <div class="lang-bar">
+      <button class="lang-btn active" id="btnUz" onclick="setLanguage('uz')">O'zbekcha</button>
+      <button class="lang-btn" id="btnRu" onclick="setLanguage('ru')">Русский</button>
+      <button class="lang-btn" id="btnEn" onclick="setLanguage('en')">English</button>
+    </div>
 
     <div id="quizScreen">
       <div class="quiz-info">
-        <span id="questionCounter">Savol: 1/50</span>
+        <span id="questionCounter">Savol: 1/10</span>
         <span id="scoreTracker">Ball: 0</span>
       </div>
       <div class="question-box" id="questionText">Savol yuklanmoqda...</div>
@@ -109,7 +137,7 @@
     </div>
 
     <div id="resultScreen" class="result-box" style="display: none;">
-      <h3>Natija 🎉</h3>
+      <h3 id="resultTitle">Natija 🎉</h3>
       <p id="resultText" style="font-size: 16px; margin: 15px 0;"></p>
       <button id="restartBtn" onclick="restartQuiz()">Qaytadan boshlash</button>
     </div>
@@ -121,74 +149,56 @@
       window.Telegram.WebApp.expand();
     }
 
-    const allQuestions = [
-      { question: "Internet tarmog'ining asoschisi (WWW yaratuvchisi) kim?", options: ["Stiv Jobs", "Tim Berners-Li", "Bill Geyts", "Mark Sukerberg"], correct: 1 },
-      { question: "JavaScript dasturlash tili qaysi yilda yaratilgan?", options: ["1991", "1995", "2000", "1985"], correct: 1 },
-      { question: "Yer yuzidagi eng katta okean qaysi?", options: ["Atlantika okeani", "Hind okeani", "Tinch okeani", "Shimoliy Muz okeani"], correct: 2 },
-      { question: "Inson tanasidagi eng kuchli muskul qaysi biri?", options: ["Yurak muskuli", "Jag' muskuli", "Son muskuli", "Elka muskuli"], correct: 1 },
-      { question: "O'zbekiston Respublikasi mustaqilligini qachon e'lon qilgan?", options: ["1991-yil 31-avgust", "1991-yil 1-sentyabr", "1991-yil 25-dekabr", "1989-yil 1-sentyabr"], correct: 1 },
-      { question: "Kompyuterning miyasi deb nimaga aytiladi?", options: ["Operativ xotira (RAM)", "Protsessor (CPU)", "Qattiq disk (HDD)", "Videokarta"], correct: 1 },
-      { question: "Eng yengil kimyoviy element qaysi?", options: ["Geliy", "Vodorod", Kislorod", "Azot"], correct: 1 },
-      { question: "Quyosh sistemasidagi eng katta sayyora?", options: ["Saturn", "Yer", "Yupiter", "Neptun"], correct: 2 },
-      { question: "Scratch dasturida bloklar qaysi tamoyil asosida ishlaydi?", options: ["Matn yozish", "Bloklarni sudrab olib kelish (Drag-and-Drop)", "Kompilyatsiya", "Kod yozish"], correct: 1 },
-      { question: "Prizmaning hajmini topish uchun nima qilinadi?", options: ["Asos yuziga balandlik ko'paytiriladi", "Perimetri qo'shiladi", "Tomonlari bo'linadi", "Faqat yuzi topiladi"], correct: 0 },
-      { question: "Buxoro shahridagi tarixiy minoraning nomi nima?", options: ["Kalta minor", "Minorai Kalon", "Sherdor", "Chorsu"], correct: 1 },
-      { question: "Suvning kimyoviy formulasi qanday?", options: ["H2O", "CO2", "O2", "NaCl"], correct: 0 },
-      { question: "Dunyodagi eng uzun daryo qaysi?", options: ["Amazonka", "Nil", "Misisipi", "Sirdaryo"], correct: 1 },
-      { question: "1 Bayt necha Bitga teng?", options: ["4", "8", "16", "32"], correct: 1 },
-      { question: "Amir Temur qachon tavallud topgan?", options: ["1336-yil", "1365-yil", "1370-yil", "1405-yil"], correct: 0 },
-      { question: "Inson tanasida nechta suyak bor (kattalarda)?", options: ["206", "210", "198", "220"], correct: 0 },
-      { question: "Kompyuter xotirasining eng kichik o'lchov birligi nima?", options: ["Bayt", "Bit", "Kilobayt", "Megabayt"], correct: 1 },
-      { question: "Frantsiya poytaxti qaysi shahar?", options: ["Berlin", "Madrid", "Parij", "Rim"], correct: 2 },
-      { question: "Alisher Navoiyning mashhur besh dostoni qanday ataladi?", options: ["Xamsa", "Devon", "Boburnoma", "Zafarnoma"], correct: 0 },
-      { question: "CSS nima vazifani bajaradi?", options: ["Sayt tuzilmasini yaratadi", "Sayt dizayni va uslubini beradi", "Saytga mantiq qo'shadi", "Ma'lumotlar bazasi"], correct: 1 },
-      { question: "Matematikada Pi (π) soni taxminan nimaga teng?", options: ["3.14", "2.71", "1.41", "3.33"], correct: 0 },
-      { question: "Qaysi qit'ada eng ko'p davlat joylashgan?", options: ["Osiyo", "Afrika", "Evropa", "Janubiy Amerika"], correct: 1 },
-      { question: "HTML so'zining ma'nosi nima?", options: ["HyperText Markup Language", "High Transfer Machine Language", "Hyperlink Text Model", "Home Tool Markup Language"], correct: 0 },
-      { question: "Eng qattiq tabiiy material nima?", options: ["Temir", "Olmos", "Titan", "Granit"], correct: 1 },
-      { question: "Tinch okeanining eng chuqur joyi qanday ataladi?", options: ["Mariana botig'i", "Java botig'i", "Puerto-Riko", "Katsivelli"], correct: 0 },
-      { question: "Python dasturlash tilining ramziy belgisi (logotipi) nima?", options: ["Ilon", "Qush", "Arslon", "Delfin"], correct: 0 },
-      { question: "1 kilogramm necha grammga teng?", options: ["100 g", "500 g", "1000 g", "10000 g"], correct: 2 },
-      { question: "Buyuk ipak yo'li qaysi qit'alarni bog'lagan?", options: ["Osiyo va Evropa", "Afrika va Amerika", "Avstraliya va Antarktida", "Faqat Osiyo"], correct: 0 },
-      { question: "Gigabayt (GB) Megabaytdan (MB) necha marta katta?", options: ["100", "512", "1024", "2048"], correct: 2 },
-      { question: "Yorug'lik tezligi sekundiga taxminan necha kilometr?", options: ["300 000 km/s", "150 000 km/s", "3 000 km/s", "30 000 km/s"], correct: 0 },
-      { question: "Abulgʻozi Bahodirxon yozgan tarixiy asar qanday nomlanadi?", options: ["Shajarai turk", "Boburnoma", "Qutadg'u bilig", "Devonu lug'atit turk"], correct: 0 },
-      { question: "Kompyuter tarmoqlarida 'IP' so'zi nimani anglatadi?", options: ["Internet Protocol", "Internal Program", "Image Process", "Input Port"], correct: 0 },
-      { question: "Inson organizmida kislorodni qaysi hujayralar tashiydi?", options: ["Oq qon tanachalari", "Qizil qon tanachalari (Eritrotsitlar)", "Trombotsitlar", "Nerv hujayralari"], correct: 1 },
-      { question: "Italiya poytaxti qaysi shahar?", options: ["Milan", "Venetsiya", "Rim", "Florensiya"], correct: 2 },
-      { question: "Qaysi planetada hayot mavjud deb topilgan?", options: ["Mars", "Venera", "Yer", "Mars"], correct: 2 },
-      { question: "Algoritm so'zi qaysi buyuk alloma nomi bilan bog'liq?", options: ["Al-Xorazmiy", "Abu Ali ibn Sino", "Beruniy", "Mirzo Ulug'bek"], correct: 0 },
-      { question: "Futbol o'yinida maydonda har bir jamoadan nechta o'yinchi harakat qiladi?", options: ["9 ta", "10 ta", "11 ta", "12 ta"], correct: 2 },
-      { question: "Gidrosfera nima?", options: ["Yerning suv qobig'i", "Havo qobig'i", "Tosh qobig'i", "Tirik organizmlar dunyosi"], correct: 0 },
-      { question: "Qaysi daryo O'zbekistondan oqib o'tmaydi?", options: ["Amudaryo", "Sirdaryo", "Amazonka", "Zarafshon"], correct: 2 },
-      { question: "Monitor qanday qurilma hisoblanadi?", options: ["Kiritish qurilmasi", "Chiqarish qurilmasi", "Saqlash qurilmasi", "Boshqarish qurilmasi"], correct: 1 },
-      { question: "Uchburchakning burchaklari yig'indisi necha gradus?", options: ["90°", "180°", "360°", "270°"], correct: 1 },
-      { question: "Mustaqil O'zbekistonning ilk Prezidenti kim bo'lgan?", options: ["Islom Karimov", "Shavkat Mirziyoyev", "Mirzo Ulug'bek", "Amir Temur"], correct: 0 },
-      { question: "Atmosfera nima?", options: ["Yerning havo qobig'i", "Yerning suv qobig'i", "Yerning qattiq qobig'i", "Yer yadrosi"], correct: 0 },
-      { question: "Klaviaturadagi 'Enter' tugmasi qanday vazifani bajaradi?", options: ["O'chirish", "Tasdiqlash yoki yangi qatorga o'tish", "Nusxalash", "Izlash"], correct: 1 },
-      { question: "Quyosh nuri Yerdagi qancha vaqtda yetib keladi?", options: ["1 soniyada", "8 daqiqada", "1 soatda", "24 soatda"], correct: 1 },
-      { question: "Bobur Mirzo qaysi mashhur asarni yozgan?", options: ["Boburnoma", "Xamsa", "Muhokamat ul-lug'atayn", "Qobusnoma"], correct: 0 },
-      { question: "Kompyuterga virus tushishining oldini olish uchun nima o'rnatiladi?", options: ["Antivirus dasturi", "O'yin", "Brauzer", "Pleyer"], correct: 0 },
-      { question: "Inson skeletida nechta bo'yin umurtqasi bor?", options: ["5 ta", "7 ta", "12 ta", "9 ta"], correct: 1 },
-      { question: "Eng kichik tub son qaysi?", options: ["0", "1", "2", "3"], correct: 2 },
-      { question: "Telegram messenjeri asoschisi kim?", options: ["Pavel Durov", "Mark Sukerberg", "Ilon Mask", "Stiv Jobs"], correct: 0 }
-    ];
+    const databases = {
+      uz: [
+        { question: "Internet tarmog'ining asoschisi (WWW yaratuvchisi) kim?", options: ["Stiv Jobs", "Tim Berners-Li", "Bill Geyts", "Mark Sukerberg"], correct: 1 },
+        { question: "JavaScript dasturlash tili qaysi yilda yaratilgan?", options: ["1991", "1995", "2000", "1985"], correct: 1 },
+        { question: "Yer yuzidagi eng katta okean qaysi?", options: ["Atlantika okeani", "Hind okeani", "Tinch okeani", "Shimoliy Muz okeani"], correct: 2 },
+        { question: "Inson tanasidagi eng kuchli muskul qaysi biri?", options: ["Yurak muskuli", "Jag' muskuli", "Son muskuli", "Elka muskuli"], correct: 1 },
+        { question: "O'zbekiston Respublikasi mustaqilligini qachon e'lon qilgan?", options: ["1991-yil 31-avgust", "1991-yil 1-sentyabr", "1991-yil 25-dekabr", "1989-yil 1-sentyabr"], correct: 1 },
+        { question: "Kompyuterning miyasi deb nimaga aytiladi?", options: ["Operativ xotira (RAM)", "Protsessor (CPU)", "Qattiq disk (HDD)", "Videokarta"], correct: 1 },
+        { question: "Eng yengil kimyoviy element qaysi?", options: ["Geliy", "Vodorod", "Kislorod", "Azot"], correct: 1 },
+        { question: "Quyosh sistemasidagi eng katta sayyora?", options: ["Saturn", "Yer", "Yupiter", "Neptun"], correct: 2 },
+        { question: "Scratch dasturida bloklar qaysi tamoyil asosida ishlaydi?", options: ["Matn yozish", "Bloklarni sudrab olib kelish", "Kompilyatsiya", "Kod yozish"], correct: 1 },
+        { question: "Matematikada Pi (π) soni taxminan nimaga teng?", options: ["3.14", "2.71", "1.41", "3.33"], correct: 0 }
+      ],
+      ru: [
+        { question: "Кто является создателем Всемирной паутины (WWW)?", options: ["Стив Джобс", "Тим Бернерс-Ли", "Билл Гейтс", "Марк Цукерберг"], correct: 1 },
+        { question: "В каком году был создан язык программирования JavaScript?", options: ["1991", "1995", "2000", "1985"], correct: 1 },
+        { question: "Какой океан является самым большим на Земле?", options: ["Атлантический", "Индийский", "Тихий", "Северный Ледовитый"], correct: 2 },
+        { question: "Какая мышца в человеческом теле является самой сильной?", options: ["Сердечная мышца", "Жевательная мышца", "Четырехглавая", "Дельтовидная"], correct: 1 },
+        { question: "Какая планета является самой большой в Солнечной системе?", options: ["Сатурн", "Земля", "Юпитер", "Нептун"], correct: 2 },
+        { question: "Что называют мозгом компьютера?", options: ["Оперативная память", "Процессор (CPU)", "Жесткий диск", "Видеокарта"], correct: 1 },
+        { question: "Какой химический элемент является самым легким?", options: ["Гелий", "Водород", "Кислород", "Азот"], correct: 1 },
+        { question: "Столица Франции — это какой город?", options: ["Берлин", "Мадрид", "Париж", "Рим"], correct: 2 },
+        { question: "Чему примерно равно число Пи (π) в математике?", options: ["3.14", "2.71", "1.41", "3.33"], correct: 0 },
+        { question: "Кто является основателем мессенджера Telegram?", options: ["Павел Дуров", "Илон Маск", "Марк Цукерберг", "Стив Джобс"], correct: 0 }
+      ],
+      en: [
+        { question: "Who is the inventor of the World Wide Web (WWW)?", options: ["Steve Jobs", "Tim Berners-Lee", "Bill Gates", "Mark Zuckerberg"], correct: 1 },
+        { question: "In which year was the JavaScript programming language created?", options: ["1991", "1995", "2000", "1985"], correct: 1 },
+        { question: "What is the largest ocean on Earth?", options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"], correct: 2 },
+        { question: "Which muscle in the human body is considered the strongest?", options: ["Heart muscle", "Jaw muscle", "Thigh muscle", "Shoulder muscle"], correct: 1 },
+        { question: "What is the largest planet in our solar system?", options: ["Saturn", "Earth", "Jupiter", "Neptune"], correct: 2 },
+        { question: "What is known as the brain of the computer?", options: ["RAM", "Processor (CPU)", "Hard Drive", "Graphics Card"], correct: 1 },
+        { question: "What is the lightest chemical element?", options: ["Helium", "Hydrogen", "Oxygen", "Nitrogen"], correct: 1 },
+        { question: "What is the capital city of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], correct: 2 },
+        { question: "What is the approximate value of Pi (π) in mathematics?", options: ["3.14", "2.71", "1.41", "3.33"], correct: 0 },
+        { question: "Who is the founder of the Telegram messenger?", options: ["Pavel Durov", "Elon Musk", "Mark Zuckerberg", "Steve Jobs"], correct: 0 }
+      ]
+    };
 
+    const uiTexts = {
+      uz: { title: "Natija 🎉", restart: "Qaytadan boshlash", counter: "Savol", score: "Ball" },
+      ru: { title: "Результат 🎉", restart: "Начать заново", counter: "Вопрос", score: "Балл" },
+      en: { title: "Result 🎉", restart: "Restart Quiz", counter: "Question", score: "Score" }
+    };
+
+    let currentLang = 'uz';
     let quizData = [];
     let currentQuestion = 0;
     let score = 0;
     let answered = false;
-
-    // Savollarni aralashtirib, o'yinga tayyorlash
-    function initQuiz() {
-      // Tasodifiy tartibda aralashtirish
-      quizData = [...allQuestions].sort(() => Math.random() - 0.5);
-      currentQuestion = 0;
-      score = 0;
-      document.getElementById('resultScreen').style.display = 'none';
-      document.getElementById('quizScreen').style.display = 'block';
-      loadQuestion();
-    }
 
     const questionCounter = document.getElementById('questionCounter');
     const scoreTracker = document.getElementById('scoreTracker');
@@ -197,12 +207,38 @@
     const quizScreen = document.getElementById('quizScreen');
     const resultScreen = document.getElementById('resultScreen');
     const resultText = document.getElementById('resultText');
+    const resultTitle = document.getElementById('resultTitle');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      
+      // Tugmalar faolligini o'zgartirish
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn' + lang.charAt(0).toUpperCase() + lang.slice(1)).classList.add('active');
+
+      // UI matnlarini yangilash
+      restartBtn.textContent = uiTexts[currentLang].restart;
+      resultTitle.textContent = uiTexts[currentLang].title;
+
+      initQuiz();
+    }
+
+    function initQuiz() {
+      quizData = [...databases[currentLang]].sort(() => Math.random() - 0.5);
+      currentQuestion = 0;
+      score = 0;
+      resultScreen.style.display = 'none';
+      quizScreen.style.display = 'block';
+      loadQuestion();
+    }
 
     function loadQuestion() {
       answered = false;
       const q = quizData[currentQuestion];
-      questionCounter.textContent = `Savol: ${currentQuestion + 1}/${quizData.length}`;
-      scoreTracker.textContent = `Ball: ${score}`;
+      const t = uiTexts[currentLang];
+      questionCounter.textContent = `${t.counter}: ${currentQuestion + 1}/${quizData.length}`;
+      scoreTracker.textContent = `${t.score}: ${score}`;
       questionText.textContent = q.question;
       optionsList.innerHTML = '';
 
@@ -221,11 +257,12 @@
 
       const q = quizData[currentQuestion];
       const allButtons = optionsList.getElementsByTagName('button');
+      const t = uiTexts[currentLang];
 
       if (selectedIndex === q.correct) {
         selectedBtn.classList.add('correct');
         score += 10;
-        scoreTracker.textContent = `Ball: ${score}`;
+        scoreTracker.textContent = `${t.score}: ${score}`;
       } else {
         selectedBtn.classList.add('wrong');
         allButtons[q.correct].classList.add('correct');
@@ -245,7 +282,14 @@
       quizScreen.style.display = 'none';
       resultScreen.style.display = 'block';
       const maxScore = quizData.length * 10;
-      resultText.innerHTML = `Siz ${quizData.length} ta savoldan ${score / 10} tasiga to'g'ri javob berdingiz.<br>Umumiy to'plagan balingiz: <b>${score} / ${maxScore}</b>`;
+      
+      if (currentLang === 'uz') {
+        resultText.innerHTML = `Siz ${quizData.length} ta savoldan ${score / 10} tasiga to'g'ri javob berdingiz.<br>Umumiy balingiz: <b>${score} / ${maxScore}</b>`;
+      } else if (currentLang === 'ru') {
+        resultText.innerHTML = `Вы ответили правильно на ${score / 10} из ${quizData.length} вопросов.<br>Ваш общий балл: <b>${score} / ${maxScore}</b>`;
+      } else {
+        resultText.innerHTML = `You answered ${score / 10} out of ${quizData.length} questions correctly.<br>Your total score: <b>${score} / ${maxScore}</b>`;
+      }
     }
 
     function restartQuiz() {
